@@ -1,0 +1,136 @@
+<!doctype html><html lang="bg"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}</style><title>Проверка на текстове</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* One column of cards, phone first: read a line, tap the version that sounds right. */
+:root{
+  --bg:#f5f6f8; --card:#ffffff; --fg:#1c1f24; --muted:#5d6470; --line:#dfe2e8;
+  --accent:#e2601b; --accent-soft:#fde7d8; --pick:#1f7a4d; --pick-soft:#e2f3ea; --on-accent:#ffffff;
+  --display:"Manrope",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --card:#1e2127; --fg:#eceef2; --muted:#a3a9b4; --line:#2f333b;
+  --accent:#f2873f; --accent-soft:#4a2a17; --pick:#5fd39a; --pick-soft:#173528; --on-accent:#15171b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#15171b; --card:#1e2127; --fg:#eceef2; --muted:#a3a9b4; --line:#2f333b;
+  --accent:#f2873f; --accent-soft:#4a2a17; --pick:#5fd39a; --pick-soft:#173528; --on-accent:#15171b; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.5}
+.wrap{max-width:680px;margin:0 auto;padding-block:28px 150px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--display);font-weight:800;font-size:28px;line-height:1.2;margin:0;text-wrap:balance}
+.intro{color:var(--muted);margin:0;display:flex;flex-direction:column;gap:10px}
+.intro p{margin:0}
+.intro b{color:var(--fg);font-weight:600}
+#list{display:flex;flex-direction:column;gap:18px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.num{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.opt{all:unset;box-sizing:border-box;display:flex;gap:12px;align-items:flex-start;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:12px;cursor:pointer;background:var(--card);color:var(--fg)}
+.opt:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.opt .tag{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:14px;background:var(--bg);color:var(--muted)}
+.opt .txt{min-width:0}
+.opt .lbl{display:block;font-size:13px;color:var(--muted);margin-bottom:2px}
+.opt[aria-pressed="true"]{border-color:var(--pick);background:var(--pick-soft)}
+.opt[aria-pressed="true"] .tag{background:var(--pick);color:var(--card)}
+mark{background:var(--accent-soft);color:inherit;border-bottom:2px solid var(--accent);padding:0 2px;border-radius:3px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.dk{all:unset;cursor:pointer;font-size:15px;color:var(--muted);padding:6px 14px;border:1px solid var(--line);border-radius:999px}
+.dk[aria-pressed="true"]{color:var(--fg);border-color:var(--fg);background:var(--bg)}
+.dk:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+textarea{width:100%;box-sizing:border-box;min-height:46px;font:inherit;font-size:16px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;resize:vertical}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding-top:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{max-width:680px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.count{font-variant-numeric:tabular-nums;color:var(--muted);font-size:15px}
+.copy{all:unset;cursor:pointer;background:var(--accent);color:var(--on-accent);font-weight:600;padding:12px 18px;border-radius:12px;font-size:16px}
+.copy:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.out{display:flex;flex-direction:column;gap:8px}
+.out p{margin:0;color:var(--fg);font-weight:600;font-size:15px}
+.out textarea{min-height:170px;font-size:14px}
+@media (prefers-reduced-motion:no-preference){.opt{transition:border-color .15s,background .15s}}
+</style>
+</head><body><div class="wrap">
+  <h1>Как звучи по-естествено?</h1>
+  <div class="intro">
+    <p>Това са реплики от кратки видеа за собственици на малки фирми. Текстът се чете на глас.</p>
+    <p>При всяка реплика <b>натиснете варианта, който звучи правилно и естествено</b>. Подчертаното е мястото с разликата. Ако имате по-добър вариант, напишете го в полето.</p>
+    <p>Накрая натиснете <b>„Копирай отговорите“</b> и ги изпратете на Даниел.</p>
+  </div>
+  <div id="list"></div>
+  <div class="out" id="out" hidden>
+    <p id="outmsg"></p>
+    <textarea id="outtext" readonly aria-label="Отговорите"></textarea>
+  </div>
+</div>
+<div class="bar"><div class="bar-in"><span class="count" id="count"></span><button class="copy" id="copy" type="button">Копирай отговорите</button></div></div>
+<script>
+const ITEMS = [{"n": 1, "orig": "Пътят до клиенти от интернет има пет нива. Повечето малки бизнеси засядат на едно от тях. И не знаят на кое.", "frag": "Пътят до клиенти от интернет", "fixes": [{"text": "Пътят към клиенти от интернет има пет нива. Повечето малки бизнеси засядат на едно от тях. И не знаят на кое.", "mark": "Пътят към клиенти от интернет"}]}, {"n": 2, "orig": "Ниво две. Видим, но без запитвания.", "frag": "Ниво две. Видим, но без запитвания.", "fixes": [{"text": "Ниво две: видим, но без запитвания.", "mark": "Ниво две: видим, но без запитвания."}]}, {"n": 3, "orig": "Ниво четири. Плащате, но на сляпо.", "frag": "Ниво четири. Плащате, но на сляпо.", "fixes": [{"text": "Ниво четири: плащате, но на сляпо.", "mark": "Ниво четири: плащате, но на сляпо."}]}, {"n": 4, "orig": "Ниво четири. Плащате, но на сляпо.", "frag": "на сляпо", "fixes": [{"text": "Ниво четири. Плащате, но насляпо.", "mark": "насляпо"}]}, {"n": 5, "orig": "Рекламата казва: избелване на зъби, запишете час тази седмица. Хората я натискат.", "frag": "избелване на зъби, запишете час тази седмица", "fixes": [{"text": "Рекламата казва: избелване на зъби. Запишете час тази седмица. Хората я натискат.", "mark": "избелване на зъби. Запишете час тази седмица."}, {"text": "Рекламата казва: „избелване на зъби, запишете час тази седмица“. Хората я натискат.", "mark": "Рекламата казва: „избелване на зъби, запишете час тази седмица“."}]}, {"n": 6, "orig": "Рекламата казва: избелване на зъби, запишете час тази седмица. Хората я натискат.", "frag": "Рекламата казва:", "fixes": [{"text": "В рекламата пише: избелване на зъби, запишете час тази седмица. Хората я натискат.", "mark": "В рекламата пише:"}]}, {"n": 7, "orig": "Рекламата казва: избелване на зъби, запишете час тази седмица. Хората я натискат.", "frag": "я натискат", "fixes": [{"text": "Рекламата казва: избелване на зъби, запишете час тази седмица. Хората кликат на нея.", "mark": "кликат на нея"}]}, {"n": 8, "orig": "Зъболекар А праща това кликване към началната страница. Добре дошли в нашата клиника. Меню. Девет услуги. Посетителят търси избелване, не го вижда и си тръгва.", "frag": "праща това кликване", "fixes": [{"text": "Зъболекар А изпраща този клик към началната страница. Добре дошли в нашата клиника. Меню. Девет услуги. Посетителят търси избелване, не го вижда и си тръгва.", "mark": "изпраща този клик"}, {"text": "Зъболекар А праща потребителя към началната страница. Добре дошли в нашата клиника. Меню. Девет услуги. Посетителят търси избелване, не го вижда и си тръгва.", "mark": "праща потребителя"}]}, {"n": 9, "orig": "Зъболекар Б праща същото кликване към една страница. Избелване. Колко струва. Бутон за записване. Посетителят намира това, което рекламата обеща. И част от хората си записват час.", "frag": "праща същото кликване", "fixes": [{"text": "Зъболекар Б праща същия потребител към една страница. Избелване. Колко струва. Бутон за записване. Посетителят намира това, което рекламата обеща. И част от хората си записват час.", "mark": "праща същия потребител"}]}, {"n": 10, "orig": "Затова, преди да платите за още реклама, вижте къде води тази, която вече имате.", "frag": "Затова, преди да платите за още реклама,", "fixes": [{"text": "Затова преди да платите за още реклама, вижте къде води тази, която вече имате.", "mark": "Затова преди да платите за още реклама,"}]}, {"n": 11, "orig": "Изпращате цената. Появяват се трите точки. И после нищо.", "frag": "И после нищо.", "fixes": [{"text": "Изпращате цената. Появяват се трите точки. И после – нищо.", "mark": "И после – нищо."}]}, {"n": 12, "orig": "Прилича на отказ. Често не е.", "frag": "Прилича на отказ. Често не е.", "fixes": [{"text": "Прилича на отказ, но често не е.", "mark": "Прилича на отказ, но често не е."}]}, {"n": 13, "orig": "Погледнете от нейната страна. Тя е задала същия въпрос на три фирми, в една и съща вечер.", "frag": "от нейната страна", "fixes": [{"text": "Погледнете от нейната гледна точка. Тя е задала същия въпрос на три фирми, в една и съща вечер.", "mark": "от нейната гледна точка"}]}, {"n": 14, "orig": "Погледнете от нейната страна. Тя е задала същия въпрос на три фирми, в една и съща вечер.", "frag": "фирми, в", "fixes": [{"text": "Погледнете от нейната страна. Тя е задала същия въпрос на три фирми в една и съща вечер.", "mark": "фирми в"}]}, {"n": 15, "orig": "Получава три числа. А голото число не ѝ дава нищо за сравнение, освен самото число.", "frag": "А голото число не ѝ дава нищо за сравнение", "fixes": [{"text": "Получава три числа. А самото число не ѝ дава нищо за сравнение, освен самото число.", "mark": "А самото число не ѝ дава нищо за сравнение"}]}, {"n": 16, "orig": "От вашата страна мълчанието звучи като: скъпо е. И вие сваляте цената. Или спирате да пишете.", "frag": "От вашата страна", "fixes": [{"text": "От ваша гледна точка мълчанието звучи като: скъпо е. И вие сваляте цената. Или спирате да пишете.", "mark": "От ваша гледна точка"}]}, {"n": 17, "orig": "От вашата страна мълчанието звучи като: скъпо е. И вие сваляте цената. Или спирате да пишете.", "frag": "като: скъпо е.", "fixes": [{"text": "От вашата страна мълчанието звучи като „скъпо е“. И вие сваляте цената. Или спирате да пишете.", "mark": "като „скъпо е“."}]}, {"n": 18, "orig": "И едно приятелско напомняне след ден-два. Някои пак ще откажат. Но поне ще го чуете.", "frag": "приятелско напомняне", "fixes": [{"text": "И едно учтиво напомняне след ден-два. Някои пак ще откажат. Но поне ще го чуете.", "mark": "учтиво напомняне"}]}, {"n": 19, "orig": "Извадете телефона си. Трийсет секунди.", "frag": "Трийсет", "fixes": [{"text": "Извадете телефона си. Тридесет секунди.", "mark": "Тридесет"}]}, {"n": 20, "orig": "Отворете собствения си сайт и попълнете формата за контакт като непознат. После гледайте три неща.", "frag": "гледайте три неща", "fixes": [{"text": "Отворете собствения си сайт и попълнете формата за контакт като непознат. После проверете три неща.", "mark": "проверете три неща"}]}, {"n": 21, "orig": "Едно. Натискате „Изпрати“. Страницата казва ли нещо?", "frag": "Страницата казва ли нещо?", "fixes": [{"text": "Едно. Натискате „Изпрати“. Страницата изписва ли нещо?", "mark": "Страницата изписва ли нещо?"}]}, {"n": 22, "orig": "Съобщенията често се губят на скучни места. Стар имейл, който никой не чете. Папката за спам. Известие, което още отива при човека, направил сайта.", "frag": "скучни места", "fixes": [{"text": "Съобщенията често се губят на банални места. Стар имейл, който никой не чете. Папката за спам. Известие, което още отива при човека, направил сайта.", "mark": "банални места"}]}, {"n": 23, "orig": "Да кажем, че отчетът на рекламата показва десет запитвания тази седмица. А телефонът ви показва четири.", "frag": "показва четири", "fixes": [{"text": "Да кажем, че отчетът на рекламата показва десет запитвания тази седмица. А телефонът ви показва, четири.", "mark": "показва, четири"}]}, {"n": 24, "orig": "Две. На една страница работят два кода за проследяване. Един човек е преброен два пъти.", "frag": "Две. На една страница работят два кода за проследяване. Един човек е преброен два пъти.", "fixes": [{"text": "Две: на една страница работят два кода за проследяване. Един човек е преброен два пъти.", "mark": "Две: на една страница работят два кода за проследяване. Един човек е преброен два пъти."}]}, {"n": 25, "orig": "За да сме честни: платформите показват много, а проследяването на обаждания върши работа. Но всяка брои по свое определение за запитване. А то е настроено на вашата страница.", "frag": "За да сме честни", "fixes": [{"text": "Честно казано: платформите показват много, а проследяването на обаждания върши работа. Но всяка брои по свое определение за запитване. А то е настроено на вашата страница.", "mark": "Честно казано"}, {"text": "За да сме честни, платформите показват много, а проследяването на обаждания върши работа. Но всяка брои по свое определение за запитване. А то е настроено на вашата страница.", "mark": "За да сме честни,"}]}];
+const KEY = "bg-review-v1";
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { state = {}; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+const LETTERS = ["А", "Б", "В", "Г"];
+function marked(text, part) {
+  const span = document.createElement("span");
+  const i = part ? text.indexOf(part) : -1;
+  if (i < 0) { span.textContent = text; return span; }
+  span.append(text.slice(0, i));
+  const m = document.createElement("mark"); m.textContent = part; span.append(m);
+  span.append(text.slice(i + part.length));
+  return span;
+}
+function setPick(n, v) { state[n] = Object.assign({}, state[n], { pick: v }); save(); render(); }
+function render() {
+  const list = document.getElementById("list"); list.textContent = "";
+  ITEMS.forEach(it => {
+    const s = state[it.n] || {};
+    const box = document.createElement("section"); box.className = "item";
+    const num = document.createElement("div"); num.className = "num"; num.textContent = "Реплика " + it.n + " от " + ITEMS.length; box.append(num);
+    const opts = [{ key: "А", label: "Както е сега", text: it.orig, part: it.frag }].concat(
+      it.fixes.map((f, k) => ({ key: LETTERS[k + 1], label: it.fixes.length > 1 ? "Поправка " + (k + 1) : "Поправка", text: f.text, part: f.mark })));
+    opts.forEach(o => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "opt"; b.id = "o" + it.n + "-" + o.key;
+      b.setAttribute("aria-pressed", s.pick === o.key ? "true" : "false");
+      const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = o.key;
+      const txt = document.createElement("span"); txt.className = "txt";
+      const lbl = document.createElement("span"); lbl.className = "lbl"; lbl.textContent = o.label;
+      txt.append(lbl, marked(o.text, o.part));
+      b.append(tag, txt);
+      b.onclick = () => setPick(it.n, o.key);
+      box.append(b);
+    });
+    const row = document.createElement("div"); row.className = "row";
+    const dk = document.createElement("button"); dk.type = "button"; dk.className = "dk"; dk.id = "dk" + it.n; dk.textContent = "Не знам";
+    dk.setAttribute("aria-pressed", s.pick === "?" ? "true" : "false");
+    dk.onclick = () => setPick(it.n, "?");
+    row.append(dk); box.append(row);
+    const ta = document.createElement("textarea"); ta.id = "c" + it.n; ta.rows = 1;
+    ta.placeholder = "Ваш вариант или бележка (по желание)"; ta.value = s.note || "";
+    ta.oninput = () => { state[it.n] = Object.assign({}, state[it.n], { note: ta.value }); save(); };
+    box.append(ta);
+    list.append(box);
+  });
+  const done = ITEMS.filter(it => state[it.n] && state[it.n].pick).length;
+  document.getElementById("count").textContent = "Отговорени: " + done + " от " + ITEMS.length;
+}
+function answers() {
+  const lines = ["Проверка на текстове – отговори"];
+  ITEMS.forEach(it => {
+    const s = state[it.n] || {};
+    let l = it.n + ". " + (s.pick ? (s.pick === "?" ? "не знам" : s.pick) : "—");
+    if (s.note && s.note.trim()) l += " | " + s.note.trim().replace(/\s+/g, " ");
+    lines.push(l);
+  });
+  return lines.join("\n");
+}
+document.getElementById("copy").onclick = () => {
+  const text = answers();
+  const out = document.getElementById("out"), msg = document.getElementById("outmsg"), ta = document.getElementById("outtext");
+  ta.value = text; out.hidden = false;
+  const fallback = () => { msg.textContent = "Маркирайте текста по-долу, копирайте го и го пратете на Даниел."; ta.focus(); ta.select(); };
+  try {
+    navigator.clipboard.writeText(text).then(() => { msg.textContent = "Копирано. Поставете го в съобщение до Даниел."; }, fallback);
+  } catch (e) { fallback(); }
+  out.scrollIntoView({ block: "center" });
+};
+render();
+</script>
+</body></html>
