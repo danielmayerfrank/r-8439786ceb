@@ -124,7 +124,7 @@ function answers() {
 document.getElementById("copy").onclick = () => {
   const text = answers();
   const out = document.getElementById("out"), msg = document.getElementById("outmsg"), ta = document.getElementById("outtext");
-  ta.value = text; out.hidden = false;
+  ta.value = text; out.hidden = false; msg.textContent = "Ако не се копира само, маркирайте текста по-долу, копирайте го и го пратете на Даниел.";
   const fallback = () => { msg.textContent = "Маркирайте текста по-долу, копирайте го и го пратете на Даниел."; ta.focus(); ta.select(); };
   try {
     navigator.clipboard.writeText(text).then(() => { msg.textContent = "Копирано. Поставете го в съобщение до Даниел."; }, fallback);
